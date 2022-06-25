@@ -5,7 +5,9 @@ const form = document.getElementById("form");
 const search = document.getElementById("search");
 
 // getUser("florinpop17");
-getUser("sameer05515");
+// getUser("sameer05515");
+
+getRepos("sameer05515");
 
 async function getUser(username) {
     const resp = await fetch(APIURL + username);
@@ -35,13 +37,52 @@ async function getRepos(username) {
     
     console.log(finalData);
 
-    main.innerHTML = `<div></div>`
-
-    for(fi of finalData){
-        createUserCard(fi);
-    }
+    createTable(finalData)
+    
 
     //addReposToCard(respData);
+}
+
+function createTable(finalData){
+    main.innerHTML = `
+    <div>
+        <table style="border-collapse: collapse; width: 100%;" border="1" id="mytable">
+        <thead>
+            <tr>
+                <th style="width: 5%;" id="sl">#</th>
+                <th style="width: 25%;" id="comp"><b>Name</b></th>
+                <th style="width: 45%;"><b>Description</b></th>
+                <th style="width: 25%;"><b>Language</b></th>
+            </tr>
+        </thead>
+
+        <tbody id="table-body">
+
+        </tbody>
+        </table>
+    </div>`;
+
+    const tableBodyEl = document.getElementById("table-body");
+
+    // for(fi of finalData){
+    //     createUserCard(fi);
+    // }
+    let count=1;
+    finalData.forEach((finalDataItem)=>{
+        const trEl = document.createElement("tr");
+        
+        trEl.innerHTML =`        
+                        <td style="width: 5%;"> ${count++}</td>
+                        <td style="width: 25%;"> 
+                            <a href="${finalDataItem.html_url}" target="_blank">
+                                ${finalDataItem.name}
+                            </a>
+                        </td>
+                        <td style="width: 45%;"> ${finalDataItem.description} </td>
+                        <td style="width: 25%;"> ${finalDataItem.language} </td>                   
+        `;
+        tableBodyEl.appendChild(trEl)
+    })
 }
 
 function createUserCard(user) {
